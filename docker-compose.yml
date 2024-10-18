@@ -1,0 +1,7 @@
+services:
+  coop_door_assistant:
+    build:
+      context: .
+    restart: always
+    ports:
+      - "9006:9006"
