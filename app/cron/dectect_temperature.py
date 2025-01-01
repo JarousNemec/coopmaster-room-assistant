@@ -10,11 +10,12 @@ def detect_temperature():
 
     client = configuration.get_mqtt_client()
     client.connect()
-
-    temp_message = "17,4 C"
+    temp_info = {"value": 17.0, "unit": "C"}
+    temp_message = json.dumps(temp_info)
     client.publish(config.MQTT_TOPIC_TEMPERATURE, temp_message)
 
-    humidity_message = "86 %"
+    humidity_info = {"value": 86.0, "unit": "%"}
+    humidity_message = json.dumps(humidity_info)
     client.publish(config.MQTT_TOPIC_HUMIDITY, humidity_message)
 
     client.disconnect()
