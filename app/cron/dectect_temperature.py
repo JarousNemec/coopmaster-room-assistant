@@ -6,7 +6,7 @@ from app.configuration import config
 
 
 def detect_temperature():
-    logging.info("Checking temperature and temperature")
+    logging.info("Checking temperature and humidity")
 
     client = configuration.get_mqtt_client()
     client.connect()
