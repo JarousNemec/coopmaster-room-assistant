@@ -20,7 +20,7 @@ class AppConfigError(Exception):
 
 
 class AppConfig:
-    PORT: int = 9005
+    PORT: int = 19005
     HOST: str = "127.0.0.1"
 
     MQTT_BROKER: str = "192.168.1.177"
@@ -79,7 +79,6 @@ def get_mqtt_client():
     return NestMQTTClient(
         config.MQTT_BROKER,
         config.MQTT_PORT,
-        config.MQTT_TOPIC,
         config.MQTT_USERNAME,
         config.MQTT_PASSWORD
     )

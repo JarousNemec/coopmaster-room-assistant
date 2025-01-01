@@ -4,14 +4,14 @@ import paho.mqtt.client as mqtt
 
 
 class NestMQTTClient:
-    def __init__(self, broker, port, topic, username, password):
+    def __init__(self, broker, port, username, password):
         self.broker = broker
         self.port = port
-        self.topic = topic
         self.mqtt_client = mqtt.Client()
-        self.mqtt_client.on_connect = self.on_connect
-        self.mqtt_client.on_message = self.on_message
         self.mqtt_client.username_pw_set(username, password)
+
+    def set_topic(self, topic):
+        self.mqtt_client.subscribe(topic)
 
     def connect(self):
         self.mqtt_client.connect(self.broker, self.port, 60)
@@ -27,5 +27,8 @@ class NestMQTTClient:
     def on_message(self, client, userdata, msg):
         pass
 
-    def close(self):
+    def register_on_message_callback(self, method):
+        self.mqtt_client.on_message = method
+
+    def disconnect(self):
         self.mqtt_client.disconnect()

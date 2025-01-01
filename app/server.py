@@ -6,9 +6,12 @@ from waitress import serve
 
 from app import configuration
 from app.blueprints.admin_blueprint import admin_blueprint
-from app.cron.check_lamp_time import check_lamp_time
+from app.configuration import config
+from app.sensor.door_checker import DoorTimeChecker
+from app.sensor.lamp_checker import LampTimeChecker
+
 from app.cron.dectect_temperature import detect_temperature
-from app.cron.door_handler import check_door_handling_time
+
 
 
 def flask_app():
@@ -28,12 +31,15 @@ def flask_app():
 def server():
     manager_app = flask_app()
 
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(check_lamp_time, 'interval', seconds=configuration.config.REPORT_INTERVAL)
-    scheduler.add_job(detect_temperature, 'interval', seconds=configuration.config.REPORT_INTERVAL)
-    scheduler.add_job(check_door_handling_time, 'interval', seconds=configuration.config.REPORT_INTERVAL)
-    scheduler.start()
+    lamp_checker = LampTimeChecker(config.MQTT_TOPIC_LAMP)
+    lamp_checker.start_checker()
 
+    door_checker = DoorTimeChecker(config.MQTT_TOPIC_DOOR)
+    door_checker.start_checker()
+
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(detect_temperature, 'interval', seconds=configuration.config.REPORT_INTERVAL)
+    scheduler.start()
 
     port = configuration.config.PORT
     host = configuration.config.HOST
