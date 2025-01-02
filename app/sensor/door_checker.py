@@ -1,11 +1,23 @@
 import logging
 
 from app import configuration
-from app.sensor.checker import Checker
+
 from app.sensor.driver_client import call_room_driver_command
 
 
-class DoorTimeChecker(Checker):
+class DoorTimeChecker:
+
+    def __init__(self, topic):
+        self.mqtt_client = configuration.get_mqtt_client()
+        self.topic = topic
+        self.mqtt_client.connect()
+        self.mqtt_client.set_topic(self.topic)
+        self.mqtt_client.register_on_message_callback(self.process_on_message)
+
+    def stop_checker(self):
+        logging.info("Stopping checker")
+        self.mqtt_client.close()
+
 
     def process_on_message(self, client, userdata, msg):
         logging.info(f"DoorTimeChecker - Received message from topic {self.topic} : {msg.payload}")
