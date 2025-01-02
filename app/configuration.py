@@ -23,12 +23,17 @@ class AppConfig:
     PORT: int = 19005
     HOST: str = "127.0.0.1"
 
+    ROOM_DRIVER_PORT: int = 29005
+    ROOM_DRIVER_HOST: str = "localhost"
+
     MQTT_BROKER: str = "192.168.1.177"
     MQTT_PORT: int = 1883
-    MQTT_TOPIC_LAMP: str = "coopmaster/room/lamp"
     MQTT_TOPIC_TEMPERATURE: str = "coopmaster/room/temperature"
     MQTT_TOPIC_HUMIDITY: str = "coopmaster/room/humidity"
-    MQTT_TOPIC_DOOR: str = "coopmaster/room/door"
+    MQTT_TOPIC_DOOR_STATE: str = "coopmaster/room/door/state"
+    MQTT_TOPIC_DOOR_CMND: str = "coopmaster/room/door/cmnd"
+    MQTT_TOPIC_LAMP_STATE: str = "coopmaster/room/lamp/state"
+    MQTT_TOPIC_LAMP_CMND: str = "coopmaster/room/lamp/cmnd"
     MQTT_USERNAME: str = "admin"
     MQTT_PASSWORD: str = "password"
     REPORT_INTERVAL: int = 5
@@ -83,8 +88,10 @@ def get_mqtt_client():
         config.MQTT_PASSWORD
     )
 
+
 def get_log_directory():
     return "./logs/"
+
 
 def get_log_filename():
     return log_file_name

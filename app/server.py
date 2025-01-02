@@ -10,8 +10,7 @@ from app.configuration import config
 from app.sensor.door_checker import DoorTimeChecker
 from app.sensor.lamp_checker import LampTimeChecker
 
-from app.cron.dectect_temperature import detect_temperature
-
+from app.cron.detect_hardware_state import detect_hardware_state
 
 
 def flask_app():
@@ -31,14 +30,11 @@ def flask_app():
 def server():
     manager_app = flask_app()
 
-    lamp_checker = LampTimeChecker(config.MQTT_TOPIC_LAMP)
-    lamp_checker.start_checker()
-
-    door_checker = DoorTimeChecker(config.MQTT_TOPIC_DOOR)
-    door_checker.start_checker()
+    LampTimeChecker(config.MQTT_TOPIC_LAMP_CMND)
+    DoorTimeChecker(config.MQTT_TOPIC_DOOR_CMND)
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(detect_temperature, 'interval', seconds=configuration.config.REPORT_INTERVAL)
+    scheduler.add_job(detect_hardware_state, 'interval', seconds=configuration.config.REPORT_INTERVAL)
     scheduler.start()
 
     port = configuration.config.PORT
