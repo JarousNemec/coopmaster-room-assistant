@@ -1,3 +1,5 @@
+import logging
+
 import requests
 
 from app import configuration
@@ -8,8 +10,12 @@ def call_room_driver(endpoint):
     host = configuration.config.ROOM_DRIVER_HOST
     url = f'http://{host}:{port}/api/{endpoint}'
 
+    try:
     # Perform the GET request
-    response = requests.get(url)
+        response = requests.get(url)
+    except:
+        logging.error(f"Could not connect to \"Room driver application\": {url}")
+        return ""
 
     # Check if the request was successful (HTTP status code 200)
     if response.status_code == 200:
