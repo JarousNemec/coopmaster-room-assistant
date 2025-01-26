@@ -34,7 +34,7 @@ def server():
     DoorTimeChecker(config.MQTT_TOPIC_DOOR_CMND)
 
     scheduler = BackgroundScheduler()
-    scheduler.add_job(detect_hardware_state, 'interval', seconds=configuration.config.REPORT_INTERVAL)
+    scheduler.add_job(detect_hardware_state, 'interval', seconds=configuration.config.REPORT_INTERVAL, max_instances=1)
     scheduler.start()
 
     port = configuration.config.PORT
